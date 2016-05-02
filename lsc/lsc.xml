@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<lsc xmlns="http://lsc-project.org/XSD/lsc-core-2.1.xsd" xmlns:obm="http://lsc-project.org/XSD/lsc-obm-plugin-1.0"  revision="0">
+<!-- Definition of the Connection -->
+  <connections>
+    <!--  Postgres data connection definition-->
+    <databaseConnection>
+      <name>postgre-source-conn</name>
+      <url>jdbc:postgresql://db_host:5432</url>
+      <username>db_user</username>
+      <password>db_password</password>
+      <driver>org.postgresql.Driver</driver>
+    </databaseConnection>
+    <!-- Obm connection definition  -->
+    <pluginConnection implementationClass="org.lsc.plugins.connectors.obm.generated.obmConnectionType">
+            <name>obm</name>
+            <url>obm_url/</url>
+            <username>obm_admin_login</username>
+            <password>obm_admin_password</password>
+    </pluginConnection>
+  </connections>
+
+  <audits />
+  
+  <tasks>
+    <task>
+      <name>User-Migration</name>
+      <bean>org.lsc.beans.SimpleBean</bean>
+      <cleanHook>org.lsc.plugins.connectors.obm.ObmDao.close</cleanHook>
+      <syncHook>org.lsc.plugins.connectors.obm.ObmDao.close</syncHook>
+      <databaseSourceService>
+        <name>postegres-source-service</name>
+        <connection reference="postgre-source-conn" />
+        <requestNameForList>getInetOrgPersonList</requestNameForList>
+        <requestNameForObject>getInetOrgPerson</requestNameForObject>
+        <requestNameForNextId>getNextInetOrgPersonId</requestNameForNextId>
+        <requestNameForClean>getInetOrgPersonClean</requestNameForClean>
+      </databaseSourceService>
+      <pluginDestinationService implementationClass="org.lsc.plugins.connectors.obm.ObmUserDstService">
+        <name>obm-user-dst</name>
+        <connection reference="obm" />
+        <obm:obmUserService>
+          <name>obm-user-service-dst</name>
+	  <connection reference="obm" />
+          <obm:domainUUID>ba104b05-a3ff-3a6a-c9a1-2aaa60a444bc</obm:domainUUID>
+		 <obm:writableAttributes>
+		    <string>id</string>
+		    <string>login</string>
+		    <string>lastname</string>
+		    <string>profile</string>
+		    <string>firstname</string>
+		    <string>commonname</string>
+		    <string>password</string>
+		    <string>kind</string>
+		    <string>title</string>
+		    <string>description</string>
+		    <string>company</string>
+		    <string>services</string>
+		    <string>direction</string>
+		    <string>addresses</string>
+		    <string>town</string>
+		    <string>zipcode</string>
+		    <string>business_zipcode</string>
+		    <string>country</string>
+		    <string>phones</string>
+		    <string>mobile</string>
+		    <string>faxes</string>
+		    <string>archived</string>
+		    <string>mail_quota</string>
+		    <string>mail_server</string>
+		    <string>mails</string>
+		    <string>hidden</string>
+		    <string>delegation</string>
+		    <string>delegation_target</string>
+		    <string>nomad_allowed</string>
+		    <string>nomad_enabled</string>
+		    <string>nomad_local_copy</string>
+		    <string>momad_mail</string>
+		  </obm:writableAttributes>
+          </obm:obmUserService>
+      </pluginDestinationService>
+      <propertiesBasedSyncOptions>
+        <mainIdentifier>srcBean.getDatasetFirstValueById('id');</mainIdentifier>
+        <defaultDelimiter>;</defaultDelimiter>
+        <defaultPolicy>FORCE</defaultPolicy>
+     </propertiesBasedSyncOptions>
+    </task>
+  </tasks>
+</lsc>
