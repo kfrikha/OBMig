@@ -80,7 +80,7 @@
       </pluginDestinationService>
       <propertiesBasedSyncOptions>
         <mainIdentifier>srcBean.getDatasetFirstValueById('id');</mainIdentifier>
-        <defaultDelimiter>;</defaultDelimiter>
+        <defaultDelimiter>§</defaultDelimiter>
         <defaultPolicy>FORCE</defaultPolicy>
      </propertiesBasedSyncOptions>
     </task>
