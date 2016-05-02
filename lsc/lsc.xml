@@ -41,7 +41,7 @@
         <obm:obmUserService>
           <name>obm-user-service-dst</name>
 	  <connection reference="obm" />
-          <obm:domainUUID>ba104b05-a3ff-3a6a-c9a1-2aaa60a444bc</obm:domainUUID>
+          <obm:domainUUID>domain__uuid</obm:domainUUID>
 		 <obm:writableAttributes>
 		    <string>id</string>
 		    <string>login</string>
